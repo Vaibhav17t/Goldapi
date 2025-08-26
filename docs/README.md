@@ -1,396 +1,288 @@
-# 🚀 Gold Trading APIs - Deployment Guide
+# 🏆 Gold Trading APIs
 
-## Overview
-This guide covers multiple deployment options for the Gold Trading APIs system, from local development to cloud production deployment.
+A comprehensive gold trading platform with two interconnected APIs for gold information and purchase transactions, featuring an AI-powered chat system and complete transaction management.
 
-## 📋 Prerequisites
+## Project Overview
 
-### Required
-- **OpenAI API Key** - Get from [OpenAI Platform](https://platform.openai.com/api-keys)
-- **Git** - For cloning the repository
-- **Node.js 18+** - For local development
+This system consists of two main APIs that work together to provide a complete gold trading experience:
 
-### Optional (Choose based on deployment method)
-- **Docker & Docker Compose** - For containerized deployment
-- **PostgreSQL** - For local database (if not using Docker)
-- **Cloud Account** - For production deployment (Render/Railway/Vercel)
+**API 1 - Gold Information & AI Chat (Port 3001)**
+- AI-powered chat system using OpenAI GPT
+- Real-time gold price information
+- Investment advice and recommendations
+- Session token generation for secure transactions
+- Gold-related query detection and routing
 
-## 🎯 Deployment Options
+**API 2 - Gold Purchase & Transactions (Port 3002)**
+- Purchase initiation and confirmation
+- User transaction history
+- Payment processing simulation
+- Purchase options and pricing
+- Integration with API 1 session tokens
 
-### Option 1: Docker Compose (Recommended)
+## Key Features
 
-**Best for:** Quick setup, production-ready, consistent environments
+- **AI Chat Integration**: Smart chatbot that provides gold investment advice and current pricing
+- **Secure Transaction Flow**: Session-based authentication between APIs
+- **Complete Purchase System**: From inquiry to transaction completion
+- **User Management**: Customer data handling and transaction tracking
+- **Web Interface**: Interactive testing dashboard for all API endpoints
+- **Database Integration**: PostgreSQL for persistent data storage
+- **Health Monitoring**: Built-in health checks for system reliability
+
+## System Architecture
+
+The system uses a microservices architecture with two specialized APIs:
+
+1. **Information API**: Handles user queries, provides AI responses, generates session tokens
+2. **Transaction API**: Manages purchases, processes payments, stores transaction records
+3. **Database**: PostgreSQL database for users, transactions, and analytics
+4. **Web Interface**: HTML/JavaScript frontend for testing and demonstration
+
+## 🚀 Quick Start
+
+### Docker Compose (Recommended)
 
 ```bash
-# 1. Clone repository
-git clone <your-repo-url>
+# Clone the repository
+git clone <repository-url>
 cd gold-trading-apis
 
-# 2. Set up environment
+# Set up environment variables
 cp .env.example .env
 # Edit .env and add your OpenAI API key
 
-# 3. Start everything
+# Start all services
 docker-compose up -d
 
-# 4. Verify deployment
+# Verify deployment
 curl http://localhost:3001/health
 curl http://localhost:3002/health
 ```
 
-**What it includes:**
-- ✅ PostgreSQL database with automatic initialization
-- ✅ Both APIs with health checks
-- ✅ Nginx load balancer
-- ✅ Persistent data storage
-- ✅ Automatic restarts
-
-### Option 2: Local Development Setup
-
-**Best for:** Development, debugging, customization
+### Local Development
 
 ```bash
-# 1. Clone and setup
-git clone <your-repo-url>
-cd gold-trading-apis
+# Run setup script
 chmod +x setup.sh
 ./setup.sh
 
-# 2. Start APIs
+# Start APIs
 ./start.sh
 
-# 3. Test APIs
+# Test the system
 ./test-apis.sh
 ```
 
-**Manual steps if setup.sh doesn't work:**
-```bash
-# Install dependencies
-cd api1-gold-info && npm install && cd ..
-cd api2-gold-purchase && npm install && cd ..
+## 🖥️ Web Interface
 
-# Setup database (requires PostgreSQL)
-createdb goldtrading
-psql -d goldtrading < database/init.sql
-psql -d goldtrading < database/seed-data.sql
+The project includes a comprehensive web testing interface (`web3.html`) that provides:
 
-# Start APIs in separate terminals
-cd api1-gold-info && npm start
-cd api2-gold-purchase && npm start
+- **Interactive API Testing**: Direct interaction with both APIs
+- **Real-time Health Monitoring**: Status indicators for each API
+- **Complete Purchase Flow**: End-to-end transaction testing
+- **Quick Action Buttons**: Pre-configured test scenarios
+- **Response Visualization**: Formatted JSON responses with syntax highlighting
+
+### 📸 Screenshots
+
+**Gold Information API Interface**
+![Gold Information API](docs/1.png)
+*API 1 interface showing gold investment query with AI-powered response and session token generation*
+
+**Gold Purchase API Interface**
+![Gold Purchase API](docs/2.png)
+*API 2 interface displaying successful gold purchase transaction with complete details*
+
+**Docker Deployment**
+![Docker Compose Setup](docs/3.png)
+*Docker containers running successfully with all services healthy*
+
+### 🎥 Demo Video
+
+**Complete System Walkthrough**
+[Watch Demo Video](https://drive.google.com/your-video-link)
+*Full demonstration of the gold trading system including API interactions, purchase flow, and web interface features*
+
+### Using the Web Interface
+
+1. Open `web3.html` in your browser
+2. Ensure both APIs are running (green status dots)
+3. Test gold queries using the chat interface
+4. Use the generated session token for purchase flows
+5. Monitor all responses in the formatted display areas
+
+## API Endpoints
+
+### API 1 - Gold Information
+
+```
+GET  /health                    - Health check
+POST /api/chat                  - AI chat endpoint
+GET  /api/analytics/daily       - Daily analytics
+GET  /api/analytics/users       - User analytics
 ```
 
-### Option 3: Render Deployment
+### API 2 - Gold Purchase
 
-**Best for:** Production deployment, free tier available
-
-#### Deploy Database
-1. Go to [Render Dashboard](https://dashboard.render.com)
-2. Create new PostgreSQL database:
-   - Name: `gold-trading-db`
-   - Plan: Free tier
-   - Save connection details
-
-#### Deploy API 1 (Gold Info)
-1. Create new Web Service
-2. Connect your GitHub repository
-3. Settings:
-   ```
-   Name: gold-info-api
-   Root Directory: api1-gold-info
-   Build Command: npm install
-   Start Command: npm start
-   ```
-4. Environment Variables:
-   ```
-   NODE_ENV=production
-   DATABASE_URL=<your-render-postgres-url>
-   OPENAI_API_KEY=<your-openai-key>
-   JWT_SECRET=<your-secret>
-   GOLD_PRICE_PER_GRAM=6500
-   CURRENCY=INR
-   ```
-
-#### Deploy API 2 (Gold Purchase)
-1. Create another Web Service
-2. Settings:
-   ```
-   Name: gold-purchase-api
-   Root Directory: api2-gold-purchase
-   Build Command: npm install
-   Start Command: npm start
-   ```
-3. Use same environment variables as API 1
-
-#### Initialize Database
-```bash
-# Connect to your Render PostgreSQL
-psql <your-render-postgres-url>
-
-# Run initialization scripts
-\i database/init.sql
-\i database/seed-data.sql
+```
+GET  /health                           - Health check
+GET  /api/purchase/options             - Available purchase options
+POST /api/purchase/initiate            - Start purchase process
+POST /api/purchase/confirm             - Complete purchase
+GET  /api/user/:id/transactions        - User transaction history
 ```
 
-### Option 4: Railway Deployment
+## ⚙️ Environment Variables
 
-**Best for:** Simple deployment, great for startups
+Create a `.env` file with the following variables:
 
 ```bash
-# 1. Install Railway CLI
-npm install -g @railway/cli
-
-# 2. Login to Railway
-railway login
-
-# 3. Create new project
-railway new
-
-# 4. Add PostgreSQL
-railway add -d postgresql
-
-# 5. Deploy API 1
-cd api1-gold-info
-railway up
-
-# 6. Deploy API 2 (in new service)
-cd ../api2-gold-purchase
-railway up --service api2
-```
-
-Environment variables in Railway:
-```
-OPENAI_API_KEY=your-key
-DATABASE_URL=${{Postgres.DATABASE_URL}}
-JWT_SECRET=your-secret
-```
-
-### Option 5: Vercel + Supabase
-
-**Best for:** Serverless deployment, edge functions
-
-#### Setup Supabase Database
-1. Create account at [Supabase](https://supabase.com)
-2. Create new project
-3. Run SQL commands from `database/init.sql` in SQL Editor
-4. Get connection string
-
-#### Deploy to Vercel
-```bash
-# Install Vercel CLI
-npm i -g vercel
-
-# Deploy API 1
-cd api1-gold-info
-vercel
-
-# Deploy API 2
-cd ../api2-gold-purchase
-vercel
-```
-
-Add environment variables in Vercel dashboard.
-
-## 🔧 Environment Configuration
-
-### Required Environment Variables
-
-```bash
-# OpenAI (Required for API 1)
-OPENAI_API_KEY=sk-your-key-here
+# OpenAI Configuration (Required)
+OPENAI_API_KEY=your-openai-api-key
 OPENAI_MODEL=gpt-3.5-turbo
 
-# Database
-DATABASE_URL=postgresql://user:pass@host:port/dbname
+# Database Configuration
+DATABASE_URL=postgresql://postgres:password@localhost:5432/goldtrading
 
 # Security
-JWT_SECRET=your-super-secret-key-min-32-chars
+JWT_SECRET=your-secret-key-minimum-32-characters
 
-# Application
+# Application Settings
 GOLD_PRICE_PER_GRAM=6500
 CURRENCY=INR
-NODE_ENV=production
+NODE_ENV=development
 ```
 
-### Platform-specific Environment Setup
+## Database Schema
 
-#### Docker Compose
+The system uses PostgreSQL with the following main tables:
+
+- **users**: Customer information and registration details
+- **conversations**: Chat history and AI interactions
+- **sessions**: Authentication tokens and session management
+- **transactions**: Purchase records and transaction details
+- **daily_analytics**: Usage statistics and metrics
+- **user_analytics**: Individual user engagement data
+
+## 🔄 Complete Transaction Flow
+
+1. **User Inquiry**: Customer asks about gold investment via API 1
+2. **AI Response**: System provides personalized advice and current pricing
+3. **Session Creation**: API 1 generates secure session token
+4. **Purchase Initiation**: API 2 receives session token and user details
+5. **Transaction Confirmation**: Purchase is processed and recorded
+6. **History Tracking**: All activities are logged for analytics
+
+## Testing the System
+
+### Basic Health Check
 ```bash
-# Edit .env file
-OPENAI_API_KEY=your-key
-# Other variables use defaults
-```
+# Check API 1
+curl http://localhost:3001/health
 
-#### Render
-```bash
-# Set in Render dashboard
-DATABASE_URL=postgresql://render-postgres-url
-OPENAI_API_KEY=your-key
-PORT=10000  # Render assigns this
-```
-
-#### Railway
-```bash
-# Railway auto-injects database URL
-DATABASE_URL=${{Postgres.DATABASE_URL}}
-OPENAI_API_KEY=your-key
-```
-
-#### Vercel
-```bash
-# Set in Vercel dashboard
-DATABASE_URL=your-supabase-url
-OPENAI_API_KEY=your-key
-```
-
-## 📊 Post-Deployment Verification
-
-### Health Checks
-```bash
-# API 1 Health
-curl https://your-api1-url/health
-
-# API 2 Health
-curl https://your-api2-url/health
+# Check API 2
+curl http://localhost:3002/health
 ```
 
 ### Complete Flow Test
 ```bash
-# 1. Test gold query (save session_token from response)
-curl -X POST https://your-api1-url/api/chat \
+# 1. Ask about gold (save the session_token from response)
+curl -X POST http://localhost:3001/api/chat \
   -H "Content-Type: application/json" \
-  -d '{"message": "What is gold price today?", "user_id": 1}'
+  -d '{"message": "What is the current gold price?", "user_id": 1}'
 
-# 2. Test purchase initiation
-curl -X POST https://your-api2-url/api/purchase/initiate \
+# 2. Initiate purchase
+curl -X POST http://localhost:3002/api/purchase/initiate \
   -H "Content-Type: application/json" \
-  -d '{"session_token": "TOKEN_FROM_STEP_1", "user_details": {"name": "Test", "email": "test@example.com"}}'
+  -d '{"session_token": "TOKEN_FROM_STEP_1", "user_details": {"name": "Test User", "email": "test@example.com", "phone": "+91-9876543210"}}'
 
-# 3. Test purchase confirmation
-curl -X POST https://your-api2-url/api/purchase/confirm \
+# 3. Complete purchase
+curl -X POST http://localhost:3002/api/purchase/confirm \
   -H "Content-Type: application/json" \
-  -d '{"user_id": 1, "gold_amount": 5.0, "session_token": "TOKEN_FROM_STEP_1"}'
+  -d '{"user_id": 1, "gold_amount": 5.0, "session_token": "TOKEN_FROM_STEP_1", "payment_method": "digital"}'
 ```
 
-## 🔒 Security Considerations
+## Deployment Options
 
-### Production Checklist
-- [ ] Strong JWT secret (min 32 characters)
-- [ ] HTTPS enabled (automatic on most platforms)
-- [ ] Database connections encrypted
-- [ ] Rate limiting configured
-- [ ] CORS properly configured
-- [ ] Environment variables secured
-- [ ] Database credentials rotated regularly
+### Production Deployment
 
-### Security Headers
-```javascript
-// Both APIs include helmet.js for security headers
-app.use(helmet({
-  contentSecurityPolicy: false, // Adjust as needed
-  crossOriginEmbedderPolicy: false
-}));
-```
+**Cloud Platforms:**
+- Render: Automatic deployments with PostgreSQL
+- Railway: Simple deployment with database integration
+- Vercel + Supabase: Serverless deployment option
 
-## 📈 Monitoring & Maintenance
+**Self-Hosted:**
+- Docker Compose: Complete containerized setup
+- Traditional VPS: Manual installation and configuration
 
-### Health Monitoring
-Set up monitoring for:
-- `/health` endpoints (both APIs)
-- Database connectivity
-- OpenAI API availability
-- Response times
+### Security Considerations
 
-### Log Monitoring
-Monitor for:
-- OpenAI API errors
-- Database connection issues
-- Authentication failures
-- High response times
+- JWT-based session management
+- Environment variable protection
+- HTTPS enforcement in production
+- Database connection encryption
+- Rate limiting implementation
+- CORS configuration
 
-### Database Maintenance
-```sql
--- Clean expired sessions (run regularly)
-SELECT clean_expired_sessions();
+## Monitoring and Analytics
 
--- Monitor database performance
-SELECT * FROM daily_analytics ORDER BY date DESC LIMIT 7;
+The system includes built-in analytics for:
 
--- Check user engagement
-SELECT * FROM user_analytics ORDER BY total_conversations DESC LIMIT 10;
-```
+- Daily conversation volumes
+- User engagement metrics
+- Transaction success rates
+- API response times
+- Error tracking and reporting
 
 ## 🚨 Troubleshooting
 
-### Common Issues
+**Common Issues:**
 
-#### "OpenAI API key not configured"
-- Verify `OPENAI_API_KEY` is set correctly
-- Check API key is valid on OpenAI platform
-- Ensure no extra spaces or characters
+- **APIs not responding**: Check if ports 3001 and 3002 are available
+- **Database connection failed**: Verify DATABASE_URL and PostgreSQL service
+- **OpenAI API errors**: Confirm OPENAI_API_KEY is valid and has sufficient credits
+- **Session token invalid**: Ensure JWT_SECRET is consistent across both APIs
 
-#### "Database connection failed"
-- Verify `DATABASE_URL` format
-- Check database is running and accessible
-- Verify credentials are correct
-
-#### "Session token invalid"
-- Check `JWT_SECRET` is consistent across APIs
-- Verify token hasn't expired (1 hour default)
-- Ensure APIs can communicate with database
-
-#### APIs not starting
-- Check port availability (3001, 3002)
-- Verify Node.js version (18+)
-- Check all dependencies installed
-
-### Debug Commands
+**Debug Commands:**
 ```bash
-# Check API logs
+# Check running containers
+docker-compose ps
+
+# View API logs
 docker-compose logs -f api1-gold-info
 docker-compose logs -f api2-gold-purchase
 
-# Database logs
-docker-compose logs -f database
-
-# Test database connection
+# Database connection test
 docker exec -it gold_trading_db psql -U postgres -d goldtrading -c "SELECT 1;"
-
-# Check running processes
-docker-compose ps
-
-# Restart services
-docker-compose restart
 ```
 
-## 📞 Support
+## Technology Stack
 
-### Documentation
-- 📖 API Documentation: See main README.md
-- 📮 Postman Collection: `postman-collection.json`
-- 🗃️ Database Schema: `database/init.sql`
+- **Backend**: Node.js, Express.js
+- **Database**: PostgreSQL
+- **AI Integration**: OpenAI GPT API
+- **Authentication**: JWT tokens
+- **Frontend**: HTML, JavaScript, CSS
+- **Containerization**: Docker, Docker Compose
+- **Security**: Helmet.js, CORS, bcrypt
 
-### Getting Help
-1. Check logs for specific error messages
-2. Verify all environment variables are set
-3. Test health endpoints
-4. Review troubleshooting section
-5. Check platform-specific documentation
+## Contributing
 
----
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly using the web interface
+5. Submit a pull request
 
-## ✅ Deployment Success Checklist
+## License
 
-After deployment, verify:
+This project is licensed under the MIT License.
 
-- [ ] Both APIs respond to health checks
-- [ ] Database tables created and populated
-- [ ] OpenAI integration working
-- [ ] Gold price queries work correctly
-- [ ] Purchase flow completes successfully
-- [ ] Transaction records stored in database
-- [ ] User conversation history tracked
-- [ ] Analytics endpoints functioning
-- [ ] Error handling working properly
-- [ ] Security headers in place
+## Support
 
-**🎉 Your Gold Trading APIs are ready for production!**
+For issues or questions:
+1. Check the troubleshooting section
+2. Review API logs for error details
+3. Verify environment configuration
+4. Test individual endpoints using the web interface
