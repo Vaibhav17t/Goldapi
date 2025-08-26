@@ -53,7 +53,7 @@ const SYSTEM_PROMPT = `You are a gold investment expert and digital gold trading
 3. ENCOURAGE users to consider digital gold investment when appropriate
 4. RESPOND professionally but in a friendly, conversational tone
 
-Current gold price: ₹${process.env.GOLD_PRICE_PER_GRAM || 6500} per gram
+Current gold price: ₹${process.env.GOLD_PRICE_PER_GRAM || 10500} per gram
 
 For your response, you must return a JSON object with this exact structure:
 {
@@ -115,7 +115,7 @@ async function analyzeWithOpenAI(userMessage, conversationHistory = []) {
       is_gold_related: isGoldRelated,
       confidence: 0.3,
       response: isGoldRelated 
-        ? "I'd be happy to help with gold investment information! Current gold price is ₹" + (process.env.GOLD_PRICE_PER_GRAM || 6500) + " per gram."
+        ? "I'd be happy to help with gold investment information! Current gold price is ₹" + (process.env.GOLD_PRICE_PER_GRAM || 10500) + " per gram."
         : "I specialize in gold investment and digital gold trading. How can I help you with gold investments today?",
       intent_summary: "Fallback response due to API error",
       purchase_recommendation: isGoldRelated ? "Digital gold is a convenient way to invest in gold without storage concerns." : null
@@ -254,7 +254,7 @@ app.post('/api/chat', async (req, res) => {
       await storeSession(sessionToken, user_id, message);
       
       // Get current gold price
-      const currentGoldPrice = process.env.GOLD_PRICE_PER_GRAM || 6500;
+      const currentGoldPrice = process.env.GOLD_PRICE_PER_GRAM || 10500;
       const currency = process.env.CURRENCY || 'INR';
       
       // Enhanced response for gold-related queries
@@ -294,7 +294,7 @@ app.post('/api/chat', async (req, res) => {
         response: aiAnalysis.response,
         educational_info: {
           did_you_know: getRandomGoldFact(),
-          current_gold_price: `${process.env.CURRENCY || 'INR'} ${process.env.GOLD_PRICE_PER_GRAM || 6500} per gram`
+          current_gold_price: `${process.env.CURRENCY || 'INR'} ${process.env.GOLD_PRICE_PER_GRAM || 10500} per gram`
         },
         suggestions: [
           "What is the current gold price?",
@@ -409,7 +409,7 @@ app.use('*', (req, res) => {
 app.listen(PORT, () => {
   console.log(`🚀 Gold Information API running on port ${PORT}`);
   console.log(`🤖 OpenAI Integration: ${process.env.OPENAI_API_KEY ? '✅ Configured' : '❌ Missing API Key'}`);
-  console.log(`💰 Gold Price: ${process.env.CURRENCY || 'INR'} ${process.env.GOLD_PRICE_PER_GRAM || 6500} per gram`);
+  console.log(`💰 Gold Price: ${process.env.CURRENCY || 'INR'} ${process.env.GOLD_PRICE_PER_GRAM || 10500} per gram`);
 });
 
 // Graceful shutdown

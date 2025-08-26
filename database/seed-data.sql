@@ -12,13 +12,13 @@ ON CONFLICT (email) DO NOTHING;
 
 -- Insert sample transactions
 INSERT INTO transactions (user_id, gold_amount, price_per_gram, total_amount, status) VALUES
-(1, 5.0000, 6500.00, 32500.00, 'completed'),
-(1, 2.5000, 6500.00, 16250.00, 'completed'),
-(2, 10.0000, 6500.00, 65000.00, 'completed'),
-(3, 1.0000, 6500.00, 6500.00, 'completed'),
-(3, 7.5000, 6500.00, 48750.00, 'completed'),
-(4, 3.0000, 6500.00, 19500.00, 'completed'),
-(5, 15.0000, 6500.00, 97500.00, 'completed')
+(1, 5.0000, 10500.00, 52500.00, 'completed'),
+(1, 2.5000, 10500.00, 26250.00, 'completed'),
+(2, 10.0000, 10500.00, 105000.00, 'completed'),
+(3, 1.0000, 10500.00, 10500.00, 'completed'),
+(3, 7.5000, 10500.00, 78750.00, 'completed'),
+(4, 3.0000, 10500.00, 31500.00, 'completed'),
+(5, 15.0000, 10500.00, 157500.00, 'completed')
 ON CONFLICT DO NOTHING;
 
 -- Insert sample conversations for testing
@@ -38,7 +38,7 @@ INSERT INTO gold_prices (price_per_gram, currency, source) VALUES
 (6475.00, 'INR', 'market_data'),
 (6500.00, 'INR', 'market_data'),
 (6520.00, 'INR', 'market_data'),
-(6500.00, 'INR', 'current')
+(10500.00, 'INR', 'current')
 ON CONFLICT DO NOTHING;
 
 -- Insert user preferences
@@ -58,7 +58,7 @@ INSERT INTO analytics_events (event_type, user_id, metadata) VALUES
 ('query', 2, '{"query_type": "general", "gold_related": false}'),
 ('query', 2, '{"query_type": "investment_benefits", "gold_related": true}'),
 ('purchase_intent', 2, '{"interest_level": "medium", "preferred_amount": "10g"}'),
-('purchase_completed', 2, '{"amount": "10g", "value": 65000}')
+('purchase_completed', 2, '{"amount": "10g", "value": 105000}')
 ON CONFLICT DO NOTHING;
 
 -- Update sequences to continue from current max IDs

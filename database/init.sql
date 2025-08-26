@@ -165,12 +165,12 @@ ORDER BY date DESC;
 
 -- Insert initial gold price
 INSERT INTO gold_prices (price_per_gram, currency, source) 
-VALUES (6500.00, 'INR', 'initial_setup')
+VALUES (10500.00, 'INR', 'initial_setup')
 ON CONFLICT DO NOTHING;
 
 -- Create function to get current gold price
 CREATE OR REPLACE FUNCTION get_current_gold_price(currency_code VARCHAR(3) DEFAULT 'INR')
-RETURNS DECIMAL(10,2) AS $
+RETURNS DECIMAL(10,2) AS $$
 DECLARE
     current_price DECIMAL(10,2);
 BEGIN
@@ -182,22 +182,23 @@ BEGIN
     
     -- Return default price if no price found
     IF current_price IS NULL THEN
-        RETURN 6500.00;
+        RETURN 10500.00;
     END IF;
     
     RETURN current_price;
 END;
-$ LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql;
 
 -- Grant necessary permissions
 GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO postgres;
 GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO postgres;
 
 -- Success message
-DO $
+DO $$
 BEGIN
     RAISE NOTICE 'Gold Trading Database initialized successfully!';
     RAISE NOTICE 'Tables created: users, transactions, sessions, conversations, gold_prices, user_preferences, analytics_events';
     RAISE NOTICE 'Views created: user_analytics, daily_analytics';
     RAISE NOTICE 'Functions created: update_updated_at_column, clean_expired_sessions, get_current_gold_price';
-END $;
+END $$;
+

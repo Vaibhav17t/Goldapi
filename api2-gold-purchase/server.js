@@ -115,10 +115,10 @@ async function getCurrentGoldPrice() {
     }
     
     // Fallback to environment variable
-    return parseFloat(process.env.GOLD_PRICE_PER_GRAM) || 6500.00;
+    return parseFloat(process.env.GOLD_PRICE_PER_GRAM) || 10500.00;
   } catch (error) {
     console.error('Error getting gold price:', error);
-    return parseFloat(process.env.GOLD_PRICE_PER_GRAM) || 6500.00;
+    return parseFloat(process.env.GOLD_PRICE_PER_GRAM) || 10500.00;
   }
 }
 
@@ -567,7 +567,7 @@ app.use('*', (req, res) => {
 // Start server
 app.listen(PORT, () => {
   console.log(`🚀 Gold Purchase API running on port ${PORT}`);
-  console.log(`💰 Gold Price: ${process.env.CURRENCY || 'INR'} ${process.env.GOLD_PRICE_PER_GRAM || 6500} per gram`);
+  console.log(`💰 Gold Price: ${process.env.CURRENCY || 'INR'} ${process.env.GOLD_PRICE_PER_GRAM || 10500} per gram`);
 });
 
 // Graceful shutdown
