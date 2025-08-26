@@ -87,15 +87,15 @@ The project includes a comprehensive web testing interface (`web3.html`) that pr
 ### 📸 Screenshots
 
 **Gold Information API Interface**
-![Gold Information API](docs/1.png)
+![Gold Information API](1.png)
 *API 1 interface showing gold investment query with AI-powered response and session token generation*
 
 **Gold Purchase API Interface**
-![Gold Purchase API](docs/2.png)
+![Gold Purchase API](2.png)
 *API 2 interface displaying successful gold purchase transaction with complete details*
 
 **Docker Deployment**
-![Docker Compose Setup](docs/3.png)
+![Docker Compose Setup](3.png)
 *Docker containers running successfully with all services healthy*
 
 ### 🎥 Demo Video
