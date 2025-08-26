@@ -1,0 +1,495 @@
+{
+  "info": {
+    "name": "Gold Trading APIs",
+    "description": "Complete API collection for testing Gold Trading system with OpenAI integration",
+    "version": "1.0.0",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "api1_base_url",
+      "value": "http://localhost:3001"
+    },
+    {
+      "key": "api2_base_url",
+      "value": "http://localhost:3002"
+    },
+    {
+      "key": "session_token",
+      "value": ""
+    },
+    {
+      "key": "user_id",
+      "value": "1"
+    }
+  ],
+  "item": [
+    {
+      "name": "API 1 - Gold Information & Intent Detection",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{api1_base_url}}/health",
+              "host": ["{{api1_base_url}}"],
+              "path": ["health"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Gold Price Query",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    if (response.session_token) {",
+                  "        pm.collectionVariables.set('session_token', response.session_token);",
+                  "        console.log('Session token saved: ' + response.session_token);",
+                  "    }",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"What is the current gold price?\",\n  \"user_id\": {{user_id}}\n}"
+            },
+            "url": {
+              "raw": "{{api1_base_url}}/api/chat",
+              "host": ["{{api1_base_url}}"],
+              "path": ["api", "chat"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Gold Investment Query",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"I want to invest in gold. What are my options?\",\n  \"user_id\": {{user_id}}\n}"
+            },
+            "url": {
+              "raw": "{{api1_base_url}}/api/chat",
+              "host": ["{{api1_base_url}}"],
+              "path": ["api", "chat"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Non-Gold Query",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"How is the weather today?\",\n  \"user_id\": {{user_id}}\n}"
+            },
+            "url": {
+              "raw": "{{api1_base_url}}/api/chat",
+              "host": ["{{api1_base_url}}"],
+              "path": ["api", "chat"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get User Conversation History",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{api1_base_url}}/api/history/{{user_id}}?limit=10",
+              "host": ["{{api1_base_url}}"],
+              "path": ["api", "history", "{{user_id}}"],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Analytics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{api1_base_url}}/api/analytics",
+              "host": ["{{api1_base_url}}"],
+              "path": ["api", "analytics"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "API 2 - Gold Purchase & Transactions",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{api2_base_url}}/health",
+              "host": ["{{api2_base_url}}"],
+              "path": ["health"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Purchase Options",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{api2_base_url}}/api/purchase/options",
+              "host": ["{{api2_base_url}}"],
+              "path": ["api", "purchase", "options"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Initiate Purchase",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    if (response.user_id) {",
+                  "        pm.collectionVariables.set('user_id', response.user_id);",
+                  "        console.log('User ID saved: ' + response.user_id);",
+                  "    }",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"session_token\": \"{{session_token}}\",\n  \"user_details\": {\n    \"name\": \"Test User\",\n    \"email\": \"test@example.com\",\n    \"phone\": \"+91-9876543210\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{api2_base_url}}/api/purchase/initiate",
+              "host": ["{{api2_base_url}}"],
+              "path": ["api", "purchase", "initiate"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Confirm Purchase - 1 Gram",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"user_id\": {{user_id}},\n  \"gold_amount\": 1.0,\n  \"session_token\": \"{{session_token}}\",\n  \"payment_method\": \"digital\"\n}"
+            },
+            "url": {
+              "raw": "{{api2_base_url}}/api/purchase/confirm",
+              "host": ["{{api2_base_url}}"],
+              "path": ["api", "purchase", "confirm"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Confirm Purchase - 5 Gram",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"user_id\": {{user_id}},\n  \"gold_amount\": 5.0,\n  \"session_token\": \"{{session_token}}\",\n  \"payment_method\": \"digital\"\n}"
+            },
+            "url": {
+              "raw": "{{api2_base_url}}/api/purchase/confirm",
+              "host": ["{{api2_base_url}}"],
+              "path": ["api", "purchase", "confirm"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Confirm Purchase - Custom Amount",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"user_id\": {{user_id}},\n  \"gold_amount\": 2.5,\n  \"session_token\": \"{{session_token}}\",\n  \"payment_method\": \"digital\"\n}"
+            },
+            "url": {
+              "raw": "{{api2_base_url}}/api/purchase/confirm",
+              "host": ["{{api2_base_url}}"],
+              "path": ["api", "purchase", "confirm"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get User Transactions",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{api2_base_url}}/api/user/{{user_id}}/transactions?limit=10",
+              "host": ["{{api2_base_url}}"],
+              "path": ["api", "user", "{{user_id}}", "transactions"],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Purchase Analytics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{api2_base_url}}/api/analytics/purchases?period=24h",
+              "host": ["{{api2_base_url}}"],
+              "path": ["api", "analytics", "purchases"],
+              "query": [
+                {
+                  "key": "period",
+                  "value": "24h"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Complete Flow Tests",
+      "item": [
+        {
+          "name": "1. Ask about Gold Price",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Response is gold-related', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response.is_gold_related).to.be.true;",
+                  "    if (response.session_token) {",
+                  "        pm.collectionVariables.set('session_token', response.session_token);",
+                  "    }",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"What is the current price of gold? I'm thinking about investing.\",\n  \"user_id\": 999\n}"
+            },
+            "url": {
+              "raw": "{{api1_base_url}}/api/chat",
+              "host": ["{{api1_base_url}}"],
+              "path": ["api", "chat"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "2. Initiate Purchase",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Purchase initiated successfully', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response.success).to.be.true;",
+                  "    pm.collectionVariables.set('user_id', response.user_id);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"session_token\": \"{{session_token}}\",\n  \"user_details\": {\n    \"name\": \"Complete Flow Test User\",\n    \"email\": \"flowtest@example.com\",\n    \"phone\": \"+91-9999999999\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{api2_base_url}}/api/purchase/initiate",
+              "host": ["{{api2_base_url}}"],
+              "path": ["api", "purchase", "initiate"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "3. Complete Purchase",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Purchase completed successfully', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response.success).to.be.true;",
+                  "    pm.expect(response.transaction_id).to.exist;",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"user_id\": {{user_id}},\n  \"gold_amount\": 5.0,\n  \"session_token\": \"{{session_token}}\",\n  \"payment_method\": \"digital\"\n}"
+            },
+            "url": {
+              "raw": "{{api2_base_url}}/api/purchase/confirm",
+              "host": ["{{api2_base_url}}"],
+              "path": ["api", "purchase", "confirm"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "4. Verify Transaction",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Transaction history retrieved', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response.transactions).to.be.an('array');",
+                  "    pm.expect(response.transactions.length).to.be.greaterThan(0);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{api2_base_url}}/api/user/{{user_id}}/transactions",
+              "host": ["{{api2_base_url}}"],
+              "path": ["api", "user", "{{user_id}}", "transactions"]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Set default values if not set",
+          "if (!pm.collectionVariables.get('api1_base_url')) {",
+          "    pm.collectionVariables.set('api1_base_url', 'http://localhost:3001');",
+          "}",
+          "if (!pm.collectionVariables.get('api2_base_url')) {",
+          "    pm.collectionVariables.set('api2_base_url', 'http://localhost:3002');",
+          "}",
+          "if (!pm.collectionVariables.get('user_id')) {",
+          "    pm.collectionVariables.set('user_id', '1');",
+          "}"
+        ]
+      }
+    }
+  ]
+}
