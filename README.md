@@ -101,7 +101,7 @@ The project includes a comprehensive web testing interface (`web3.html`) that pr
 ### 🎥 Demo Video
 
 **Complete System Walkthrough**
-[Watch Demo Video](https://drive.google.com/your-video-link)
+[Watch Demo Video](https://drive.google.com/drive/folders/1kFcloXr-ghzK5XIJn7p4xgcN_fGPtwxk?usp=sharing)
 *Full demonstration of the gold trading system including API interactions, purchase flow, and web interface features*
 
 ### Using the Web Interface
